@@ -1,6 +1,7 @@
 package com.spf.arb.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,12 +19,14 @@ import com.spf.arb.R;
  * Author: ShiPeifeng
  * Date: 16/9/14.
  */
-public class ArbTextView extends ViewGroup{
+public class ArbTextView extends ViewGroup {
 
     private Context mContext;
 
-    private int firstBgColor;
-    private int secBgColor;
+    private int firstBgColor = Color.TRANSPARENT;
+    private int secBgColor = Color.TRANSPARENT;
+    private int firstBgColorRes = 0;
+    private int secBgColorRes = 0;
 
     private int paddingLeft = 0;
     private int paddingTop = 0;
@@ -78,14 +81,18 @@ public class ArbTextView extends ViewGroup{
         this.paddingBottom = b;
     }
 
-
-
     public void setBgColor(int fistCor, int secCor) {
         this.firstBgColor = fistCor;
         this.secBgColor = secCor;
     }
 
+    public void setBgColorRes(int fistCorRes, int secCorRes) {
+        this.firstBgColorRes = fistCorRes;
+        this.secBgColorRes = secCorRes;
+    }
+
     public void switchBottomImg(boolean open, int... idHeightBgCor) {
+        int originalCorRes = 0;
         if (open && idHeightBgCor.length == 3) {
             btmDrawableId = idHeightBgCor[0];
             btmDrawableHeight = idHeightBgCor[1];
@@ -93,6 +100,7 @@ public class ArbTextView extends ViewGroup{
         } else {
             btmDrawableHeight = 0;
             specialBgCor = idHeightBgCor[0];
+            originalCorRes = idHeightBgCor[1];//RES ID
         }
         if (open) {
             RelativeLayout.LayoutParams bottomImgLp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, btmDrawableHeight);
@@ -101,7 +109,8 @@ public class ArbTextView extends ViewGroup{
             btmImg.setImageResource(btmDrawableId);
             btmImg.setLayoutParams(bottomImgLp);
             btmImg.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            outerLL.addViewInLayout(btmImg, -1, btmImg.getLayoutParams());
+//            outerLL.addViewInLayout(btmImg, -1, bottomImgLp);
+            outerLL.addView(btmImg);
             isShownBtmImg = true;
         } else {
             //remove if included
@@ -110,7 +119,11 @@ public class ArbTextView extends ViewGroup{
             }
             isShownBtmImg = false;
         }
-        innerTxt.setBackgroundColor(specialBgCor);
+        if (specialBgCor != -1) {
+            innerTxt.setBackgroundColor(specialBgCor);
+        } else {
+            innerTxt.setBackgroundResource(originalCorRes);
+        }
         invalidate();
     }
 
@@ -129,17 +142,21 @@ public class ArbTextView extends ViewGroup{
         invalidate();
     }
 
-
-
     public void generate() {
         outerLL.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
         innerTxt.setWidth((width - paddingLeft - paddingRight) > 0 ? (width - paddingLeft - paddingRight) : 190);
         innerTxt.setHeight((height - paddingTop - paddingBottom) > 0 ? (height - paddingTop - paddingBottom) : 90);
-        outerLL.setBackgroundColor(firstBgColor);
-        innerTxt.setBackgroundColor(secBgColor);
+        if (firstBgColor > 0 && secBgColor > 0) {
+            outerLL.setBackgroundColor(firstBgColor);
+            innerTxt.setBackgroundColor(secBgColor);
+        } else if (firstBgColorRes > 0 && secBgColorRes > 0) {
+            outerLL.setBackgroundResource(firstBgColorRes);
+            innerTxt.setBackgroundResource(secBgColorRes);
+        }
 
         if (blockHeight > 0) {
             RelativeLayout.LayoutParams bottomLp = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, blockHeight);
+            bottomLp.bottomMargin = 1;//下方留边界线
             bottomLp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
             block = new View(mContext);
             block.setBackgroundColor(blockCor);
