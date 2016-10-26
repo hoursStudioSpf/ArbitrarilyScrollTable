@@ -3,4 +3,12 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="itemCor">#FFFFFF</color>
+    <color name="titleCor">#535353</color>
+    <color name="blockCor">#000000</color>
+    <color name="dividerCor">#000000</color>
+    <color name="teamSortCor1">#FF4081</color>
+    <color name="teamSortCor2">#3F51B5</color>
+    <color name="textCor">#ff434141</color>
+    <color name="highLight">#ffc01e2f</color>
 </resources>

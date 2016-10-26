@@ -2,7 +2,6 @@ package com.spf.arb.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
@@ -12,7 +11,7 @@ import android.widget.HorizontalScrollView;
  * Author: ShiPeifeng
  * Date: 16/9/13.
  */
-public class ArbHorScroller extends HorizontalScrollView{
+public class ArbHorScroller extends HorizontalScrollView {
 
     private OnScrollListener onScrollListener;
 
@@ -58,5 +57,10 @@ public class ArbHorScroller extends HorizontalScrollView{
             return new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         }
         return lp;
+    }
+
+    @Override
+    protected boolean overScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX, int scrollRangeY, int maxOverScrollX, int maxOverScrollY, boolean isTouchEvent) {
+        return super.overScrollBy(deltaX, deltaY, scrollX, scrollY, scrollRangeX, scrollRangeY, maxOverScrollX, maxOverScrollY, isTouchEvent);
     }
 }
